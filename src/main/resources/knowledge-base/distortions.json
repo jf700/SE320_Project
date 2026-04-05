@@ -1,0 +1,162 @@
+[
+  {
+    "id": "all-or-nothing",
+    "name": "All-or-Nothing Thinking",
+    "description": "Seeing things in black-and-white categories. If performance falls short of perfect, you see yourself as a total failure.",
+    "examples": [
+      "I didn't finish everything on my to-do list, so the whole day was a waste.",
+      "If I can't do it perfectly, there's no point in trying at all.",
+      "I made one mistake in my presentation, so it was a complete disaster."
+    ],
+    "reframingTips": [
+      "Look for the gray area between the two extremes.",
+      "Ask yourself: Is there a middle ground between total success and total failure?",
+      "Replace 'always' and 'never' with 'sometimes' and 'occasionally'.",
+      "Acknowledge partial successes and progress made."
+    ]
+  },
+  {
+    "id": "overgeneralization",
+    "name": "Overgeneralization",
+    "description": "Viewing a single negative event as a never-ending pattern of defeat by using words like 'always' or 'never'.",
+    "examples": [
+      "I got rejected from that job, so I'll never get hired anywhere.",
+      "My coworker criticized my report - nobody ever appreciates my work.",
+      "This project failed, so everything I do fails."
+    ],
+    "reframingTips": [
+      "Look for evidence that contradicts the generalization.",
+      "Replace 'always/never' with specific, time-limited language.",
+      "Remind yourself of past successes in similar situations.",
+      "Consider whether you're applying one experience to all situations."
+    ]
+  },
+  {
+    "id": "mental-filtering",
+    "name": "Mental Filtering",
+    "description": "Picking out a single negative detail and dwelling on it exclusively, so that your vision of all reality becomes darkened.",
+    "examples": [
+      "I got great feedback on my review except for one area, which means I'm failing.",
+      "The whole vacation was ruined because of that one rainy day.",
+      "I focus only on the one critical comment and ignore the ten positive ones."
+    ],
+    "reframingTips": [
+      "Deliberately notice and list positive aspects of the situation.",
+      "Ask yourself: Am I focusing on just one part of the picture?",
+      "Practice gratitude by noting three good things each day.",
+      "Consider whether you would judge a friend this harshly."
+    ]
+  },
+  {
+    "id": "catastrophizing",
+    "name": "Catastrophizing",
+    "description": "Expecting the worst-case scenario to happen, or blowing things out of proportion. Also called magnification.",
+    "examples": [
+      "I made an error in my email - I'm going to get fired for sure.",
+      "This headache must mean something is seriously wrong with me.",
+      "If I speak up in the meeting, everyone will think I'm incompetent."
+    ],
+    "reframingTips": [
+      "Ask yourself: What's the most likely outcome, not the worst?",
+      "Consider: Has this worst-case scenario ever actually happened?",
+      "Rate the actual probability of the catastrophic outcome (0-100%).",
+      "Think about how you've handled similar situations in the past."
+    ]
+  },
+  {
+    "id": "mind-reading",
+    "name": "Mind Reading",
+    "description": "Assuming you know what other people are thinking without any evidence, usually believing they are thinking negatively about you.",
+    "examples": [
+      "My boss didn't say hello this morning - she must be upset with me.",
+      "They're probably thinking I'm not qualified for this role.",
+      "He looked at me funny - he must think my idea was stupid."
+    ],
+    "reframingTips": [
+      "Remind yourself that you cannot read minds.",
+      "Consider alternative explanations for their behavior.",
+      "Ask directly instead of assuming what others think.",
+      "Focus on observable facts rather than interpretations."
+    ]
+  },
+  {
+    "id": "fortune-telling",
+    "name": "Fortune Telling",
+    "description": "Predicting that things will turn out badly, as if you have a crystal ball. Treating predictions as established facts.",
+    "examples": [
+      "I just know the presentation will go horribly.",
+      "There's no point in applying - I won't get the job.",
+      "This new initiative is going to fail, I can feel it."
+    ],
+    "reframingTips": [
+      "Remind yourself that you cannot predict the future.",
+      "Look for evidence both for and against your prediction.",
+      "Consider times when your negative predictions were wrong.",
+      "Focus on what you can control rather than predicting outcomes."
+    ]
+  },
+  {
+    "id": "emotional-reasoning",
+    "name": "Emotional Reasoning",
+    "description": "Assuming that your negative emotions necessarily reflect the way things really are: 'I feel it, therefore it must be true.'",
+    "examples": [
+      "I feel overwhelmed, so my situation must be hopeless.",
+      "I feel incompetent, therefore I must be incompetent.",
+      "I feel guilty, so I must have done something wrong."
+    ],
+    "reframingTips": [
+      "Recognize that feelings are not facts.",
+      "Ask yourself: What evidence supports this feeling?",
+      "Consider whether you would feel differently after rest or a good day.",
+      "Separate the emotion from the reality of the situation."
+    ]
+  },
+  {
+    "id": "should-statements",
+    "name": "Should Statements",
+    "description": "Using 'should', 'must', or 'ought to' statements that set rigid rules about how you or others must behave, leading to guilt and frustration.",
+    "examples": [
+      "I should be able to handle this without feeling stressed.",
+      "I must always be productive at work.",
+      "They should have known better than to say that."
+    ],
+    "reframingTips": [
+      "Replace 'should' with 'I would prefer' or 'It would be nice if'.",
+      "Ask yourself: Is this rule realistic and flexible?",
+      "Consider whether you're holding yourself to an impossible standard.",
+      "Practice self-compassion when you don't meet your own rules."
+    ]
+  },
+  {
+    "id": "labeling",
+    "name": "Labeling",
+    "description": "Attaching a negative label to yourself or others instead of describing the specific behavior. An extreme form of overgeneralization.",
+    "examples": [
+      "I'm a loser because I didn't get the promotion.",
+      "He's a jerk because he disagreed with me.",
+      "I'm lazy because I took a break."
+    ],
+    "reframingTips": [
+      "Describe the specific behavior instead of using a global label.",
+      "Recognize that one action doesn't define your entire identity.",
+      "Ask yourself: Would I label a friend this way for the same behavior?",
+      "Use specific, behavioral language instead of character judgments."
+    ]
+  },
+  {
+    "id": "personalization",
+    "name": "Personalization",
+    "description": "Seeing yourself as the cause of some negative external event that you were not primarily responsible for.",
+    "examples": [
+      "My team didn't meet the deadline because of me.",
+      "My child is struggling in school - I must be a bad parent.",
+      "The project failed because I wasn't good enough."
+    ],
+    "reframingTips": [
+      "Consider all the factors that contributed to the outcome.",
+      "Ask yourself: What percentage of responsibility is actually mine?",
+      "Recognize that many outcomes are influenced by multiple people and factors.",
+      "Distinguish between influence and control."
+    ]
+  }
+]

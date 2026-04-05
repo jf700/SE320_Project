@@ -1,0 +1,38 @@
+@startuml c4-container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Container Diagram - Digital Therapy Assistant
+
+Person(patient, "Patient", "Primary user seeking burnout recovery")
+Person(therapist, "Therapist", "Monitors patient progress")
+Person(admin, "System Administrator", "Manages the platform")
+
+System_Boundary(dta, "Digital Therapy Assistant") {
+    Container(cli, "CLI Application", "Java", "Command-line interface providing menu-driven therapeutic workflows for user interaction")
+    Container(api, "Spring Boot Application", "Java / Spring Boot 3.x", "Backend services: REST API endpoints, business logic, AI integration, authentication, and session management")
+    ContainerDb(db, "H2 Database", "H2 (file-based)", "Stores user accounts, sessions, diary entries, chat messages, and cognitive distortion data")
+    Container(vectorstore, "SimpleVector Store", "Spring AI SimpleVectorStore", "Vector storage for RAG-based similarity search of CBT knowledge base documents")
+    Container(kb, "Knowledge Base", "JSON Files", "CBT reference materials: cognitive distortions, techniques, crisis protocols, and burnout-specific content")
+}
+
+System_Ext(llm, "LLM Provider\n(Anthropic Claude)", "AI language model for therapeutic responses")
+System_Ext(email, "Email Service", "Notification delivery")
+System_Ext(ehr, "Healthcare EHR Systems", "Health record integration")
+
+Rel(patient, cli, "Interacts via command-line menus", "Terminal")
+Rel(therapist, api, "Accesses patient data and reports", "HTTPS/REST")
+Rel(admin, api, "Manages system configuration", "HTTPS/REST")
+
+Rel(cli, api, "Makes API calls for all operations", "HTTP/REST")
+Rel(api, db, "Reads/writes persistent data", "JDBC/JPA")
+Rel(api, vectorstore, "Performs similarity search for RAG context", "Java API")
+Rel(api, kb, "Loads CBT reference documents at startup", "ClassPath I/O")
+Rel(vectorstore, kb, "Indexes knowledge base content", "Embedding")
+
+Rel(api, llm, "Sends prompts, receives AI responses", "HTTPS/REST API")
+Rel(api, email, "Sends notification emails", "SMTP")
+Rel(api, ehr, "Exports patient data", "HTTPS/FHIR")
+
+@enduml

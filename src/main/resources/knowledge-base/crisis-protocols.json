@@ -1,0 +1,169 @@
+{
+  "warningSignsRecognition": [
+    {
+      "category": "Verbal Indicators",
+      "signs": [
+        "Talking about wanting to die or kill oneself",
+        "Expressing feelings of hopelessness or having no reason to live",
+        "Talking about feeling trapped or in unbearable pain",
+        "Talking about being a burden to others",
+        "Expressing rage or seeking revenge",
+        "Mentioning access to lethal means"
+      ]
+    },
+    {
+      "category": "Behavioral Indicators",
+      "signs": [
+        "Increased substance use",
+        "Withdrawing from activities and isolating",
+        "Sleeping too little or too much",
+        "Giving away prized possessions",
+        "Aggressive or reckless behavior",
+        "Searching online for methods of self-harm"
+      ]
+    },
+    {
+      "category": "Emotional Indicators",
+      "signs": [
+        "Sudden calmness after a period of depression",
+        "Extreme mood swings",
+        "Loss of interest in things previously enjoyed",
+        "Feelings of shame, humiliation, or despair",
+        "Intense anxiety or agitation",
+        "Feeling like a burden to others"
+      ]
+    }
+  ],
+  "deEscalationTechniques": [
+    {
+      "technique": "Active Listening",
+      "description": "Give your full attention, reflect back what you hear, and validate their feelings without judgment.",
+      "steps": [
+        "Listen without interrupting.",
+        "Use reflective statements: 'It sounds like you're feeling...'",
+        "Validate their pain: 'That sounds incredibly difficult.'",
+        "Avoid minimizing: Don't say 'It's not that bad' or 'Just think positive.'"
+      ]
+    },
+    {
+      "technique": "Grounding Exercises",
+      "description": "Help the person reconnect with the present moment through sensory awareness.",
+      "steps": [
+        "Guide them through the 5-4-3-2-1 technique (5 things you see, 4 you hear, 3 you touch, 2 you smell, 1 you taste).",
+        "Encourage slow, deep breathing (breathe in for 4, hold for 4, out for 6).",
+        "Ask them to hold a comforting object or press feet firmly to the ground."
+      ]
+    },
+    {
+      "technique": "Safety Planning",
+      "description": "Collaborate on a concrete plan to keep the person safe.",
+      "steps": [
+        "Identify personal warning signs.",
+        "List internal coping strategies they can use.",
+        "Identify people and social settings that provide distraction.",
+        "List people they can contact for help.",
+        "List professional resources and crisis lines.",
+        "Make the environment safe by reducing access to lethal means."
+      ]
+    }
+  ],
+  "safetyPlanningSteps": [
+    {
+      "step": 1,
+      "title": "Recognize Warning Signs",
+      "description": "Identify thoughts, images, moods, situations, and behaviors that precede a crisis.",
+      "prompts": [
+        "What thoughts tell you a crisis may be developing?",
+        "What mood changes do you notice before things get worse?",
+        "What situations tend to trigger these feelings?"
+      ]
+    },
+    {
+      "step": 2,
+      "title": "Internal Coping Strategies",
+      "description": "List things you can do on your own to take your mind off problems and help you resist acting on thoughts of self-harm.",
+      "prompts": [
+        "What activities help you feel better or distract you?",
+        "What relaxation techniques work for you?",
+        "What gives you a sense of purpose or accomplishment?"
+      ]
+    },
+    {
+      "step": 3,
+      "title": "Social Contacts for Distraction",
+      "description": "Identify people and social settings that can provide positive distraction.",
+      "prompts": [
+        "Who can you be around to feel better (even without discussing the crisis)?",
+        "What social settings help you feel connected?"
+      ]
+    },
+    {
+      "step": 4,
+      "title": "People to Contact for Help",
+      "description": "List specific people you can reach out to when you need help.",
+      "prompts": [
+        "Who are the people you trust most?",
+        "Who can you call at any time of day or night?",
+        "Have you talked to any of these people about how they can help?"
+      ]
+    },
+    {
+      "step": 5,
+      "title": "Professional Resources",
+      "description": "List professional contacts and crisis services.",
+      "prompts": [
+        "Who is your therapist or counselor?",
+        "What is the nearest emergency room?",
+        "Do you have the crisis hotline numbers saved in your phone?"
+      ]
+    },
+    {
+      "step": 6,
+      "title": "Making the Environment Safe",
+      "description": "Reduce access to lethal means and create a safer environment.",
+      "prompts": [
+        "Are there things in your environment that could be dangerous during a crisis?",
+        "Can you ask someone to hold onto these items for you?",
+        "Is there a safe space you can go to?"
+      ]
+    }
+  ],
+  "emergencyResources": [
+    {
+      "name": "988 Suicide & Crisis Lifeline",
+      "contact": "Call or text 988",
+      "availability": "24/7",
+      "description": "Free and confidential emotional support for people in suicidal crisis or emotional distress."
+    },
+    {
+      "name": "Crisis Text Line",
+      "contact": "Text HOME to 741741",
+      "availability": "24/7",
+      "description": "Free crisis counseling via text message."
+    },
+    {
+      "name": "National Domestic Violence Hotline",
+      "contact": "1-800-799-7233",
+      "availability": "24/7",
+      "description": "Support for victims of domestic violence."
+    },
+    {
+      "name": "SAMHSA National Helpline",
+      "contact": "1-800-662-4357",
+      "availability": "24/7, 365 days a year",
+      "description": "Free referral and information service for substance abuse and mental health."
+    },
+    {
+      "name": "Veterans Crisis Line",
+      "contact": "Dial 988, then press 1",
+      "availability": "24/7",
+      "description": "Crisis support for veterans and their families."
+    },
+    {
+      "name": "Emergency Services",
+      "contact": "911",
+      "availability": "24/7",
+      "description": "For immediate life-threatening emergencies."
+    }
+  ]
+}

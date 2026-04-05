@@ -1,0 +1,83 @@
+@startuml c4-component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Component Diagram - Digital Therapy Assistant (Spring Boot Application)
+
+Container_Boundary(api, "Spring Boot Application") {
+
+    ' Controller Layer
+    Component(authCtrl, "AuthController", "Spring REST Controller", "Handles user registration, login, logout, and token refresh")
+    Component(sessionCtrl, "SessionController", "Spring REST Controller", "Manages CBT session lifecycle: start, chat, end, history")
+    Component(diaryCtrl, "DiaryController", "Spring REST Controller", "CRUD operations for thought diary entries and AI analysis")
+    Component(progressCtrl, "ProgressController", "Spring REST Controller", "Provides weekly/monthly progress reports and achievements")
+    Component(crisisCtrl, "CrisisController", "Spring REST Controller", "Crisis detection, coping strategies, safety plan management")
+
+    ' Service Layer
+    Component(authSvc, "AuthService", "Spring Service", "User authentication, JWT token generation and validation")
+    Component(sessionSvc, "SessionService", "Spring Service", "Session business logic, coordinates with AI for chat responses")
+    Component(diarySvc, "DiaryService", "Spring Service", "Diary entry management and AI-powered distortion suggestions")
+    Component(progressSvc, "ProgressService", "Spring Service", "Calculates progress metrics and generates achievement data")
+    Component(crisisSvc, "CrisisService", "Spring Service", "Manages crisis resources, safety plans, and coping strategies")
+    Component(aiSvc, "AiService", "Spring Service", "Core AI integration: therapeutic responses, distortion analysis, session summaries")
+
+    ' Repository Layer
+    Component(userRepo, "UserRepository", "Spring Data JPA", "Data access for User entities")
+    Component(sessionRepo, "SessionRepository", "Spring Data JPA", "Data access for UserSession entities with custom queries")
+    Component(diaryRepo, "DiaryEntryRepository", "Spring Data JPA", "Data access for DiaryEntry entities with pagination")
+    Component(chatRepo, "ChatMessageRepository", "Spring Data JPA", "Data access for ChatMessage entities ordered by timestamp")
+
+    ' AI Integration
+    Component(ragBuilder, "RagContextBuilder", "Spring Component", "Builds context from vector store, session history, and diary patterns")
+    Component(crisisDetector, "CrisisDetector", "Spring Component", "Dual-layer crisis detection: keyword-based + AI semantic analysis")
+
+    ' Security
+    Component(jwtFilter, "JwtAuthenticationFilter", "Spring Security Filter", "Intercepts requests to validate JWT tokens")
+    Component(jwtProvider, "JwtTokenProvider", "Spring Component", "Generates and validates JWT access and refresh tokens")
+}
+
+ContainerDb(db, "H2 Database", "H2", "Persistent storage")
+Container(vectorStore, "SimpleVectorStore", "Spring AI", "Vector similarity search")
+System_Ext(llm, "LLM Provider", "Anthropic Claude API")
+
+' Controller -> Service relationships
+Rel(authCtrl, authSvc, "Delegates auth operations")
+Rel(sessionCtrl, sessionSvc, "Delegates session operations")
+Rel(diaryCtrl, diarySvc, "Delegates diary operations")
+Rel(progressCtrl, progressSvc, "Delegates progress queries")
+Rel(crisisCtrl, crisisSvc, "Delegates crisis operations")
+
+' Service -> Service relationships
+Rel(sessionSvc, aiSvc, "Requests AI chat responses and session summaries")
+Rel(diarySvc, aiSvc, "Requests distortion analysis and insights")
+Rel(crisisSvc, aiSvc, "Requests crisis detection")
+
+' Service -> Repository relationships
+Rel(authSvc, userRepo, "Reads/writes user data")
+Rel(sessionSvc, sessionRepo, "Reads/writes session data")
+Rel(diarySvc, diaryRepo, "Reads/writes diary entries")
+Rel(aiSvc, chatRepo, "Reads chat history for context")
+Rel(aiSvc, sessionRepo, "Reads session data for context")
+
+' AI Integration relationships
+Rel(aiSvc, ragBuilder, "Requests assembled RAG context")
+Rel(aiSvc, crisisDetector, "Requests crisis analysis")
+Rel(ragBuilder, vectorStore, "Performs similarity search")
+Rel(ragBuilder, sessionRepo, "Retrieves session history")
+Rel(ragBuilder, diaryRepo, "Retrieves diary patterns")
+Rel(ragBuilder, chatRepo, "Retrieves session transcript")
+
+' External relationships
+Rel(userRepo, db, "JDBC/JPA")
+Rel(sessionRepo, db, "JDBC/JPA")
+Rel(diaryRepo, db, "JDBC/JPA")
+Rel(chatRepo, db, "JDBC/JPA")
+Rel(aiSvc, llm, "Sends prompts via ChatClient", "HTTPS")
+Rel(crisisDetector, llm, "Sends crisis analysis prompts", "HTTPS")
+
+' Security relationships
+Rel(jwtFilter, jwtProvider, "Validates tokens")
+Rel(authSvc, jwtProvider, "Generates tokens")
+
+@enduml

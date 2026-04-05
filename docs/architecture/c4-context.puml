@@ -1,0 +1,26 @@
+@startuml c4-context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title System Context Diagram - Digital Therapy Assistant
+
+Person(patient, "Patient", "Primary user seeking workplace burnout recovery through CBT-based therapy")
+Person(therapist, "Therapist", "Mental health professional monitoring patient progress and providing oversight")
+Person(admin, "System Administrator", "Manages the platform, user accounts, and system configuration")
+
+System(dta, "Digital Therapy Assistant", "AI-guided Cognitive Behavioral Therapy (CBT) platform for workplace burnout recovery")
+
+System_Ext(llm, "LLM Provider\n(Anthropic Claude)", "Provides AI-powered therapeutic responses, cognitive distortion analysis, and crisis detection")
+System_Ext(email, "Email Service", "Sends notifications, session reminders, and crisis alerts")
+System_Ext(ehr, "Healthcare EHR Systems", "Electronic Health Record systems for FHIR-based data export and integration")
+
+Rel(patient, dta, "Uses for CBT sessions, thought diary, progress tracking", "CLI / REST API")
+Rel(therapist, dta, "Monitors patient progress, reviews session summaries", "REST API")
+Rel(admin, dta, "Manages system configuration and user accounts", "REST API")
+
+Rel(dta, llm, "Sends prompts for therapeutic responses and analysis", "HTTPS/REST API")
+Rel(dta, email, "Sends notification emails", "SMTP")
+Rel(dta, ehr, "Exports patient data in FHIR format", "HTTPS/FHIR")
+
+@enduml

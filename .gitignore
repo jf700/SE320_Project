@@ -1,0 +1,29 @@
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (runtime generated)
+data/
+*.db
+*.db.mv.db
+*.db.trace.db
+
+# Environment
+.env
+*.env
+
+# Logs
+*.log

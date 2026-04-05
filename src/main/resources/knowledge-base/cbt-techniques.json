@@ -1,0 +1,73 @@
+[
+  {
+    "id": "thought-challenging",
+    "name": "Thought Challenging / Cognitive Restructuring",
+    "description": "A core CBT technique that involves identifying negative automatic thoughts, evaluating the evidence for and against them, and developing more balanced alternative thoughts.",
+    "steps": [
+      "Identify the automatic negative thought.",
+      "Rate your belief in the thought (0-100%).",
+      "Identify the cognitive distortion(s) present.",
+      "Examine the evidence for and against the thought.",
+      "Develop a balanced alternative thought.",
+      "Rate your belief in the new thought and re-rate the original."
+    ],
+    "whenToUse": "When you notice a strong negative emotional reaction, recurring negative thoughts, or when you catch yourself engaging in cognitive distortions. Particularly useful for workplace burnout when negative self-talk about performance or competence is present."
+  },
+  {
+    "id": "behavioral-activation",
+    "name": "Behavioral Activation",
+    "description": "A technique focused on increasing engagement in positive and meaningful activities to combat depression, withdrawal, and burnout. Based on the principle that action often precedes motivation.",
+    "steps": [
+      "Monitor daily activities and mood ratings.",
+      "Identify activities that bring pleasure or a sense of accomplishment.",
+      "Schedule positive activities into your daily routine.",
+      "Start small with manageable, achievable tasks.",
+      "Gradually increase activity level over time.",
+      "Track mood changes in relation to activities."
+    ],
+    "whenToUse": "When experiencing low motivation, withdrawal from activities, depression symptoms, or burnout-related disengagement. Especially helpful when you feel too tired or unmotivated to do anything but know that inactivity worsens your mood."
+  },
+  {
+    "id": "exposure",
+    "name": "Exposure Techniques",
+    "description": "Gradually and systematically facing feared situations, thoughts, or feelings in a controlled way to reduce anxiety and avoidance behaviors.",
+    "steps": [
+      "Create a hierarchy of feared situations (least to most anxiety-provoking).",
+      "Start with the least anxiety-provoking situation.",
+      "Practice relaxation techniques before and during exposure.",
+      "Stay in the situation until anxiety naturally decreases.",
+      "Gradually move up the hierarchy as comfort increases.",
+      "Reflect on what you learned from each exposure experience."
+    ],
+    "whenToUse": "When avoidance of work tasks, social situations, or responsibilities is contributing to burnout. Useful for addressing procrastination driven by anxiety about performance or fear of failure."
+  },
+  {
+    "id": "relaxation-mindfulness",
+    "name": "Relaxation and Mindfulness",
+    "description": "Techniques that promote physical relaxation and present-moment awareness to reduce stress, anxiety, and the physiological symptoms of burnout.",
+    "steps": [
+      "Find a quiet, comfortable space.",
+      "Practice deep breathing: inhale for 4 counts, hold for 4, exhale for 6.",
+      "Perform progressive muscle relaxation from toes to head.",
+      "Practice mindful awareness of thoughts without judgment.",
+      "Use grounding techniques (5-4-3-2-1 senses exercise).",
+      "Incorporate brief mindfulness breaks throughout the workday."
+    ],
+    "whenToUse": "When experiencing physical tension, racing thoughts, difficulty sleeping, or feeling overwhelmed. Particularly valuable as a daily practice for preventing burnout and as an acute intervention during high-stress moments at work."
+  },
+  {
+    "id": "problem-solving",
+    "name": "Problem-Solving Therapy",
+    "description": "A structured approach to addressing life problems that contribute to emotional distress. Focuses on developing effective coping strategies and action plans.",
+    "steps": [
+      "Define the problem clearly and specifically.",
+      "Brainstorm all possible solutions without judging them.",
+      "Evaluate the pros and cons of each solution.",
+      "Choose the best solution or combination of solutions.",
+      "Create a detailed action plan with specific steps.",
+      "Implement the plan and evaluate the results.",
+      "Adjust the approach if needed."
+    ],
+    "whenToUse": "When feeling stuck or overwhelmed by specific work problems, interpersonal conflicts, or life challenges. Useful when burnout stems from feeling helpless about changeable situations, such as workload management or boundary setting."
+  }
+]

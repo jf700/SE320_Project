@@ -1,0 +1,256 @@
+@startuml c4-code
+
+' ============================================================
+' PART A: Class Diagram - AI Service Module
+' ============================================================
+
+title Code Diagrams - Digital Therapy Assistant AI Service Module
+
+package "AI Service Module" {
+
+    interface "AiService" as AiService {
+        +generateResponse(sessionId: UUID, userMessage: String): ChatResponse
+        +analyzeThought(automaticThought: String): List<DistortionSuggestion>
+        +generateReframingPrompts(thought: String, distortionIds: List<String>): List<String>
+        +detectCrisis(text: String): CrisisDetectionResultDto
+        +generateInsights(userId: UUID): DiaryInsights
+        +summarizeSession(sessionId: UUID): SessionSummary
+    }
+
+    class "AiServiceImpl" as AiServiceImpl {
+        -chatClient: ChatClient
+        -ragContextBuilder: RagContextBuilder
+        -crisisDetector: CrisisDetector
+        -sessionRepository: UserSessionRepository
+        -chatMessageRepository: ChatMessageRepository
+        -objectMapper: ObjectMapper
+        +generateResponse(sessionId: UUID, userMessage: String): ChatResponse
+        +analyzeThought(automaticThought: String): List<DistortionSuggestion>
+        +generateReframingPrompts(thought: String, distortionIds: List<String>): List<String>
+        +detectCrisis(text: String): CrisisDetectionResultDto
+        +generateInsights(userId: UUID): DiaryInsights
+        +summarizeSession(sessionId: UUID): SessionSummary
+    }
+
+    class "RagContextBuilder" as RagContextBuilder {
+        -vectorStore: VectorStore
+        -sessionRepository: UserSessionRepository
+        -diaryRepository: DiaryEntryRepository
+        -chatMessageRepository: ChatMessageRepository
+        +buildContext(userId: UUID, sessionId: UUID, query: String): String
+    }
+
+    class "KnowledgeBaseLoader" as KnowledgeBaseLoader {
+        -vectorStore: VectorStore
+        -storePath: String
+        +loadKnowledgeBase(): void
+        -loadDistortions(mapper: ObjectMapper): int
+        -loadCbtTechniques(mapper: ObjectMapper): int
+        -loadCrisisProtocols(mapper: ObjectMapper): int
+    }
+
+    class "CrisisDetector" as CrisisDetector {
+        -{static} CRISIS_KEYWORDS: Set<String>
+        -chatClient: ChatClient
+        -objectMapper: ObjectMapper
+        +analyze(text: String): CrisisDetectionResultDto
+        +detectKeywords(text: String): List<String>
+        -analyzeWithAi(text: String): CrisisDetectionResultDto
+        -combineResults(...): CrisisDetectionResultDto
+    }
+
+    interface "VectorStore" as VectorStore {
+        +add(documents: List<Document>): void
+        +similaritySearch(request: SearchRequest): List<Document>
+    }
+
+    class "SimpleVectorStore" as SimpleVectorStore {
+        +add(documents: List<Document>): void
+        +similaritySearch(request: SearchRequest): List<Document>
+        +save(file: File): void
+    }
+}
+
+package "DTOs" {
+    class "ChatResponse" as ChatResponseDto {
+        +sessionId: UUID
+        +message: String
+        +role: String
+        +timestamp: LocalDateTime
+        +crisisAssessment: CrisisDetectionResultDto
+    }
+
+    class "CrisisDetectionResultDto" as CrisisDto {
+        +riskLevel: String
+        +keywordsDetected: List<String>
+        +recommendedAction: String
+        +reasoning: String
+    }
+
+    class "DistortionSuggestion" as DistortionDto {
+        +distortionId: String
+        +confidence: double
+        +reasoning: String
+    }
+
+    class "DiaryInsights" as InsightsDto {
+        +commonDistortions: List<String>
+        +emotionFrequency: Map<String, Integer>
+        +averageMoodImprovement: double
+        +patterns: List<String>
+        +recommendations: List<String>
+    }
+
+    class "SessionSummary" as SummaryDto {
+        +sessionId: UUID
+        +summary: String
+        +keyTopics: List<String>
+        +techniquesUsed: List<String>
+        +distortionsIdentified: List<String>
+        +moodProgression: String
+        +homeworkSuggestions: List<String>
+    }
+}
+
+' Relationships
+AiServiceImpl ..|> AiService : implements
+SimpleVectorStore ..|> VectorStore : implements
+
+AiServiceImpl --> RagContextBuilder : uses
+AiServiceImpl --> CrisisDetector : uses
+RagContextBuilder --> VectorStore : queries
+KnowledgeBaseLoader --> VectorStore : populates
+
+AiServiceImpl ..> ChatResponseDto : creates
+AiServiceImpl ..> CrisisDto : creates
+AiServiceImpl ..> DistortionDto : creates
+AiServiceImpl ..> InsightsDto : creates
+AiServiceImpl ..> SummaryDto : creates
+CrisisDetector ..> CrisisDto : creates
+
+@enduml
+
+' ============================================================
+' PART B: Sequence Diagram - Chat Message Flow
+' ============================================================
+
+@startuml c4-code-sequence-chat
+
+title Sequence Diagram A - Chat Message Flow
+
+actor User
+participant "CLI Application" as CLI
+participant "SessionController" as Controller
+participant "SessionService" as SessionSvc
+participant "AiService" as AiSvc
+participant "CrisisDetector" as Crisis
+participant "RagContextBuilder" as RAG
+participant "VectorStore" as VS
+participant "ChatClient\n(LLM)" as LLM
+database "H2 Database" as DB
+
+User -> CLI : Enter chat message
+CLI -> Controller : POST /sessions/{id}/chat\n{message: "..."}
+Controller -> SessionSvc : chat(sessionId, message)
+
+' Save user message
+SessionSvc -> DB : Save ChatMessage (USER)
+
+' AI processing
+SessionSvc -> AiSvc : generateResponse(sessionId, message)
+
+' Crisis check first
+AiSvc -> Crisis : analyze(message)
+Crisis -> Crisis : detectKeywords(message)
+Crisis -> LLM : Crisis detection prompt
+LLM --> Crisis : JSON risk assessment
+Crisis --> AiSvc : CrisisDetectionResultDto
+
+' Build RAG context
+AiSvc -> RAG : buildContext(userId, sessionId, message)
+RAG -> VS : similaritySearch(message)
+VS --> RAG : Relevant CBT documents
+RAG -> DB : Get session history
+DB --> RAG : UserSession records
+RAG -> DB : Get diary patterns
+DB --> RAG : DiaryEntry records
+RAG -> DB : Get session transcript
+DB --> RAG : ChatMessage records
+RAG --> AiSvc : Assembled context string
+
+' Generate therapeutic response
+AiSvc -> LLM : System prompt + context + user message
+LLM --> AiSvc : AI therapeutic response
+
+AiSvc --> SessionSvc : ChatResponse
+
+' Save assistant message
+SessionSvc -> DB : Save ChatMessage (ASSISTANT)
+
+SessionSvc --> Controller : ChatResponse
+Controller --> CLI : JSON response
+CLI --> User : Display AI response\n(+ crisis info if applicable)
+
+@enduml
+
+' ============================================================
+' PART C: Sequence Diagram - Diary Entry with AI Analysis
+' ============================================================
+
+@startuml c4-code-sequence-diary
+
+title Sequence Diagram B - Diary Entry with AI Analysis
+
+actor User
+participant "CLI Application" as CLI
+participant "DiaryController" as Controller
+participant "DiaryService" as DiarySvc
+participant "AiService" as AiSvc
+participant "ChatClient\n(LLM)" as LLM
+database "H2 Database" as DB
+
+User -> CLI : Create diary entry\n(situation, thought, emotions)
+CLI -> Controller : POST /diary/entries\n{situation, automaticThought, emotions, moodBefore}
+Controller -> DiarySvc : createEntry(userId, request)
+DiarySvc -> DB : Save DiaryEntry
+DB --> DiarySvc : Saved entry
+
+' User requests distortion analysis
+User -> CLI : Request distortion suggestions
+CLI -> Controller : POST /diary/distortions/suggest\n{thought: "automaticThought"}
+Controller -> DiarySvc : suggestDistortions(thought)
+
+DiarySvc -> AiSvc : analyzeThought(automaticThought)
+AiSvc -> LLM : Distortion analysis prompt\nwith thought + distortion types
+LLM --> AiSvc : JSON array of distortions\n[{distortionId, confidence, reasoning}]
+AiSvc --> DiarySvc : List<DistortionSuggestion>
+
+DiarySvc --> Controller : List<DistortionSuggestion>
+Controller --> CLI : JSON distortion suggestions
+CLI --> User : Display identified distortions\nwith confidence scores
+
+' Reframing prompts
+User -> CLI : Request reframing prompts
+CLI -> Controller : POST /diary/reframe\n{thought, distortionIds}
+Controller -> DiarySvc : generateReframingPrompts(thought, distortionIds)
+
+DiarySvc -> AiSvc : generateReframingPrompts(thought, distortionIds)
+AiSvc -> LLM : Reframing prompt with\nthought + distortions
+LLM --> AiSvc : JSON array of reframing prompts
+AiSvc --> DiarySvc : List<String>
+
+DiarySvc --> Controller : List<String> reframing prompts
+Controller --> CLI : JSON reframing prompts
+CLI --> User : Display reframing suggestions
+
+' Update entry with alternative thought
+User -> CLI : Enter alternative thought\nand mood after
+CLI -> Controller : PUT /diary/entries/{id}\n{alternativeThought, moodAfter}
+Controller -> DiarySvc : updateEntry(entryId, updates)
+DiarySvc -> DB : Update DiaryEntry
+DB --> DiarySvc : Updated entry
+DiarySvc --> Controller : Updated DiaryEntryResponse
+Controller --> CLI : JSON response
+CLI --> User : Confirm entry updated
+
+@enduml
