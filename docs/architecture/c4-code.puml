@@ -130,11 +130,12 @@ CrisisDetector ..> CrisisDto : creates
 
 @enduml
 
+
+@startuml c4-code-sequence-chat
+
 ' ============================================================
 ' PART B: Sequence Diagram - Chat Message Flow
 ' ============================================================
-
-@startuml c4-code-sequence-chat
 
 title Sequence Diagram A - Chat Message Flow
 
@@ -193,11 +194,12 @@ CLI --> User : Display AI response\n(+ crisis info if applicable)
 
 @enduml
 
+
+@startuml c4-code-sequence-diary
+
 ' ============================================================
 ' PART C: Sequence Diagram - Diary Entry with AI Analysis
 ' ============================================================
-
-@startuml c4-code-sequence-diary
 
 title Sequence Diagram B - Diary Entry with AI Analysis
 
