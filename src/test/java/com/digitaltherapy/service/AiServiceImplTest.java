@@ -6,6 +6,7 @@ import com.digitaltherapy.entity.UserSession;
 import com.digitaltherapy.entity.User;
 import com.digitaltherapy.repository.ChatMessageRepository;
 import com.digitaltherapy.repository.UserSessionRepository;
+import com.digitaltherapy.service.impl.AiServiceImpl;
 import com.digitaltherapy.service.rag.CrisisDetector;
 import com.digitaltherapy.service.rag.RagContextBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ai.chat.client.ChatClient;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;

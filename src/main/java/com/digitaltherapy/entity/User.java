@@ -1,10 +1,17 @@
 package com.digitaltherapy.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -21,6 +28,7 @@ public class User {
     private String name;
 
     private Boolean onboardingComplete = false;
+
 
     @Enumerated(EnumType.STRING)
     private OnboardingPath onboardingPath;

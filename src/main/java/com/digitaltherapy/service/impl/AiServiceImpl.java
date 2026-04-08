@@ -1,14 +1,14 @@
-package com.digitaltherapy.service;
+package com.digitaltherapy.service.impl;
 
 import com.digitaltherapy.dto.*;
 import com.digitaltherapy.entity.ChatMessage;
 import com.digitaltherapy.entity.UserSession;
 import com.digitaltherapy.repository.ChatMessageRepository;
 import com.digitaltherapy.repository.UserSessionRepository;
+import com.digitaltherapy.service.AiService;
 import com.digitaltherapy.service.rag.CrisisDetector;
 import com.digitaltherapy.service.rag.RagContextBuilder;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

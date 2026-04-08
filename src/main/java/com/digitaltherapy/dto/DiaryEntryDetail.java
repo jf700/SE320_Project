@@ -1,45 +1,19 @@
-package com.digitaltherapy.entity;
+package com.digitaltherapy.dto;
 
-import jakarta.persistence.*;
-import lombok.Builder;
+import com.digitaltherapy.entity.CognitiveDistortion;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "diary_entries")
-public class DiaryEntry {
+public class DiaryEntryDetail {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @Column(columnDefinition = "TEXT")
     private String situation;
-
-    @Column(columnDefinition = "TEXT")
     private String automaticThought;
-
-    @ElementCollection
-    @CollectionTable(name = "diary_entry_emotions", joinColumns = @JoinColumn(name = "entry_id"))
-    @Column(name = "emotion")
-    private List<String> emotions;
-
-    @ManyToMany
-    @JoinTable(
-        name = "diary_entry_distortions",
-        joinColumns = @JoinColumn(name = "entry_id"),
-        inverseJoinColumns = @JoinColumn(name = "distortion_id")
-    )
-    private List<CognitiveDistortion> distortions;
-
-    @Column(columnDefinition = "TEXT")
     private String alternativeThought;
+    private List<String> emotions;
+    private List<CognitiveDistortion> distortions;
 
     private Integer moodBefore;
     private Integer moodAfter;
@@ -48,36 +22,57 @@ public class DiaryEntry {
 
     private LocalDateTime createdAt;
 
-    private Boolean deleted = false;
+    public DiaryEntryDetail() {}
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
+    public DiaryEntryDetail(UUID id, String situation, String automaticThought,
+                            String alternativeThought, List<String> emotions,
+                            List<CognitiveDistortion> distortions,
+                            Integer moodBefore, Integer moodAfter,
+                            Integer beliefRatingBefore, Integer beliefRatingAfter,
+                            LocalDateTime createdAt) {
+        this.id = id;
+        this.situation = situation;
+        this.automaticThought = automaticThought;
+        this.alternativeThought = alternativeThought;
+        this.emotions = emotions;
+        this.distortions = distortions;
+        this.moodBefore = moodBefore;
+        this.moodAfter = moodAfter;
+        this.beliefRatingBefore = beliefRatingBefore;
+        this.beliefRatingAfter = beliefRatingAfter;
+        this.createdAt = createdAt;
     }
 
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+
     public String getSituation() { return situation; }
     public void setSituation(String situation) { this.situation = situation; }
+
     public String getAutomaticThought() { return automaticThought; }
     public void setAutomaticThought(String automaticThought) { this.automaticThought = automaticThought; }
-    public List<String> getEmotions() { return emotions; }
-    public void setEmotions(List<String> emotions) { this.emotions = emotions; }
-    public List<CognitiveDistortion> getDistortions() { return distortions; }
-    public void setDistortions(List<CognitiveDistortion> distortions) { this.distortions = distortions; }
+
     public String getAlternativeThought() { return alternativeThought; }
     public void setAlternativeThought(String alternativeThought) { this.alternativeThought = alternativeThought; }
+
+    public List<String> getEmotions() { return emotions; }
+    public void setEmotions(List<String> emotions) { this.emotions = emotions; }
+
+    public List<CognitiveDistortion> getDistortions() { return distortions; }
+    public void setDistortions(List<CognitiveDistortion> distortions) { this.distortions = distortions; }
+
     public Integer getMoodBefore() { return moodBefore; }
     public void setMoodBefore(Integer moodBefore) { this.moodBefore = moodBefore; }
+
     public Integer getMoodAfter() { return moodAfter; }
     public void setMoodAfter(Integer moodAfter) { this.moodAfter = moodAfter; }
+
     public Integer getBeliefRatingBefore() { return beliefRatingBefore; }
     public void setBeliefRatingBefore(Integer beliefRatingBefore) { this.beliefRatingBefore = beliefRatingBefore; }
+
     public Integer getBeliefRatingAfter() { return beliefRatingAfter; }
     public void setBeliefRatingAfter(Integer beliefRatingAfter) { this.beliefRatingAfter = beliefRatingAfter; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
-    public Boolean getDeleted() { return deleted; }
-    public void setDeleted(Boolean deleted) { this.deleted = deleted; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

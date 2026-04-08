@@ -13,6 +13,7 @@ public class DiaryInsights {
 
     public DiaryInsights() {}
 
+
     public List<String> getCommonDistortions() { return commonDistortions; }
     public void setCommonDistortions(List<String> commonDistortions) { this.commonDistortions = commonDistortions; }
 

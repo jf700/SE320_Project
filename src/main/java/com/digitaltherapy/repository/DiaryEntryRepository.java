@@ -23,4 +23,5 @@ public interface DiaryEntryRepository extends JpaRepository<DiaryEntry, UUID> {
 
     @Query("SELECT AVG(d.moodAfter - d.moodBefore) FROM DiaryEntry d WHERE d.user.id = :userId AND d.deleted = false AND d.moodBefore IS NOT NULL AND d.moodAfter IS NOT NULL")
     Double calculateAverageMoodImprovement(@Param("userId") UUID userId);
+
 }
