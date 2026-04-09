@@ -1,0 +1,50 @@
+@startuml c4-component-ai-crisis
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title Component Diagram - AI Integration & Crisis Detection
+
+Container_Boundary(api, "Spring Boot Application") {
+
+    ' Controller
+    Component(crisisCtrl, "CrisisController", "Spring REST Controller", "Crisis detection, coping strategies, safety plan management")
+
+    ' Services
+    Component(crisisSvc, "CrisisService", "Spring Service", "Manages crisis resources, safety plans, and coping strategies")
+    Component(aiSvc, "AiService", "Spring Service", "Core AI integration: therapeutic responses, distortion analysis, crisis detection")
+
+    ' AI Components
+    Component(ragBuilder, "RagContextBuilder", "Spring Component", "Builds context from vector store, session history, and diary patterns")
+    Component(kbLoader, "KnowledgeBaseLoader", "Spring Component", "Loads distortions, CBT techniques, and crisis protocols into vector store")
+    Component(crisisDetector, "CrisisDetector", "Spring Component", "Dual-layer crisis detection: keyword scan + AI semantic analysis")
+
+    ' Repositories
+    Component(sessionRepo, "UserSessionRepository", "Spring Data JPA", "Data access for UserSession entities")
+    Component(diaryRepo, "DiaryEntryRepository", "Spring Data JPA", "Data access for DiaryEntry entities")
+    Component(chatRepo, "ChatMessageRepository", "Spring Data JPA", "Data access for ChatMessage entities")
+    Component(contactRepo, "TrustedContactRepository", "Spring Data JPA", "Data access for TrustedContact entities by user")
+}
+
+ContainerDb(db, "H2 Database", "H2", "Persistent storage")
+Container(vectorStore, "SimpleVectorStore", "Spring AI", "Vector similarity search")
+System_Ext(llm, "LLM Provider", "Anthropic Claude API")
+
+' Relationships
+Rel(crisisCtrl, crisisSvc, "Delegates crisis operations")
+Rel(aiSvc, ragBuilder, "Requests assembled RAG context")
+Rel(aiSvc, crisisDetector, "Requests crisis analysis")
+Rel(aiSvc, llm, "Sends prompts via ChatClient", "HTTPS")
+Rel(crisisDetector, llm, "Sends crisis analysis prompts", "HTTPS")
+Rel(ragBuilder, vectorStore, "Performs similarity search")
+Rel(ragBuilder, sessionRepo, "Retrieves session history")
+Rel(ragBuilder, diaryRepo, "Retrieves diary patterns")
+Rel(ragBuilder, chatRepo, "Retrieves session transcript")
+Rel(kbLoader, vectorStore, "Loads knowledge base documents")
+Rel(contactRepo, db, "JDBC/JPA")
+Rel(sessionRepo, db, "JDBC/JPA")
+Rel(diaryRepo, db, "JDBC/JPA")
+Rel(chatRepo, db, "JDBC/JPA")
+
+@enduml

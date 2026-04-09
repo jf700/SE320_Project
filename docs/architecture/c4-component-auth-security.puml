@@ -1,0 +1,40 @@
+@startuml c4-component-auth-security
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title Component Diagram - Auth & Security Layer
+
+Container_Boundary(api, "Spring Boot Application") {
+
+    ' Controller
+    Component(authCtrl, "AuthController", "Spring REST Controller", "Handles user registration, login, logout, and token refresh")
+
+    ' Service
+    Component(authSvc, "AuthService", "Spring Service", "User authentication, JWT token generation and validation")
+
+    ' Security
+    Component(jwtFilter, "JwtAuthenticationFilter", "Spring Security Filter", "Intercepts requests to validate JWT tokens and set authentication")
+    Component(jwtProvider, "JwtTokenProvider", "Spring Component", "Generates and validates HS256-signed JWT access and refresh tokens")
+    Component(tokenBlacklist, "TokenBlacklist", "Spring Component", "In-memory set tracking invalidated tokens for logout")
+
+    ' Repository
+    Component(userRepo, "UserRepository", "Spring Data JPA", "Data access for User entities")
+
+    ' Exception Handling
+    Component(exHandler, "GlobalExceptionHandler", "@RestControllerAdvice", "Maps exceptions to proper HTTP status codes and error response format")
+}
+
+ContainerDb(db, "H2 Database", "H2", "Persistent storage")
+
+' Relationships
+Rel(authCtrl, authSvc, "Delegates auth operations")
+Rel(authSvc, userRepo, "Reads/writes user data")
+Rel(authSvc, jwtProvider, "Generates tokens")
+Rel(authSvc, tokenBlacklist, "Blacklists tokens on logout")
+Rel(jwtFilter, jwtProvider, "Validates tokens")
+Rel(jwtFilter, tokenBlacklist, "Checks blacklisted tokens")
+Rel(userRepo, db, "JDBC/JPA")
+
+@enduml

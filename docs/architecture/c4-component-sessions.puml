@@ -1,0 +1,43 @@
+@startuml c4-component-sessions
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title Component Diagram - Session Management
+
+Container_Boundary(api, "Spring Boot Application") {
+
+    ' Controller
+    Component(sessionCtrl, "SessionController", "Spring REST Controller", "Manages CBT session lifecycle: start, chat, end, history")
+
+    ' Service
+    Component(sessionSvc, "SessionService", "Spring Service", "Session business logic: start, chat, end, history")
+    Component(aiSvc, "AiService", "Spring Service", "Core AI integration: therapeutic responses, distortion analysis, crisis detection")
+
+    ' Repositories
+    Component(sessionRepo, "UserSessionRepository", "Spring Data JPA", "Data access for UserSession entities with date-range and status queries")
+    Component(chatRepo, "ChatMessageRepository", "Spring Data JPA", "Data access for ChatMessage entities")
+    Component(cbtRepo, "CbtSessionRepository", "Spring Data JPA", "Data access for CbtSession entities ordered by module")
+    Component(moduleRepo, "SessionModuleRepository", "Spring Data JPA", "Data access for SessionModule entities")
+    Component(userRepo, "UserRepository", "Spring Data JPA", "Data access for User entities")
+}
+
+ContainerDb(db, "H2 Database", "H2", "Persistent storage")
+System_Ext(llm, "LLM Provider", "Anthropic Claude API")
+
+' Relationships
+Rel(sessionCtrl, sessionSvc, "Delegates session operations")
+Rel(sessionSvc, cbtRepo, "Reads CBT session templates")
+Rel(sessionSvc, moduleRepo, "Reads session modules")
+Rel(sessionSvc, sessionRepo, "Reads/writes user sessions")
+Rel(sessionSvc, userRepo, "Reads user data")
+Rel(sessionSvc, chatRepo, "Saves chat messages")
+Rel(aiSvc, llm, "Sends prompts via ChatClient", "HTTPS")
+Rel(sessionRepo, db, "JDBC/JPA")
+Rel(chatRepo, db, "JDBC/JPA")
+Rel(cbtRepo, db, "JDBC/JPA")
+Rel(moduleRepo, db, "JDBC/JPA")
+Rel(userRepo, db, "JDBC/JPA")
+
+@enduml
