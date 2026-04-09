@@ -1,0 +1,134 @@
+@startuml entity-relationship
+
+title Entity-Relationship Diagram - Digital Therapy Assistant
+
+skinparam linetype ortho
+
+entity "users" as users {
+    * **id** : UUID <<PK>>
+    --
+    * email : VARCHAR <<UNIQUE, NOT NULL>>
+    * password_hash : VARCHAR <<NOT NULL>>
+    name : VARCHAR
+    onboarding_complete : BOOLEAN
+    onboarding_path : ENUM(SELF, THERAPIST_REFERRED)
+    severity_level : ENUM(MILD, MODERATE, SIGNIFICANT)
+    streak_days : INTEGER
+    created_at : TIMESTAMP
+    updated_at : TIMESTAMP
+}
+
+entity "user_sessions" as user_sessions {
+    * **id** : UUID <<PK>>
+    --
+    * user_id : UUID <<FK>>
+    cbt_session_id : UUID <<FK>>
+    status : ENUM(IN_PROGRESS, COMPLETED, EARLY_EXIT)
+    started_at : TIMESTAMP
+    ended_at : TIMESTAMP
+    mood_before : INTEGER
+    mood_after : INTEGER
+}
+
+entity "chat_messages" as chat_messages {
+    * **id** : UUID <<PK>>
+    --
+    * user_session_id : UUID <<FK>>
+    role : ENUM(USER, ASSISTANT)
+    content : TEXT
+    modality : ENUM(TEXT, VOICE, VIDEO)
+    timestamp : TIMESTAMP
+}
+
+entity "diary_entries" as diary_entries {
+    * **id** : UUID <<PK>>
+    --
+    * user_id : UUID <<FK>>
+    situation : TEXT
+    automatic_thought : TEXT
+    alternative_thought : TEXT
+    mood_before : INTEGER
+    mood_after : INTEGER
+    belief_rating_before : INTEGER
+    belief_rating_after : INTEGER
+    deleted : BOOLEAN
+    created_at : TIMESTAMP
+}
+
+entity "diary_entry_emotions" as diary_emotions {
+    * **entry_id** : UUID <<FK>>
+    * emotion : VARCHAR
+}
+
+entity "cognitive_distortions" as cognitive_distortions {
+    * **id** : VARCHAR <<PK>>
+    --
+    name : VARCHAR
+    description : TEXT
+}
+
+entity "distortion_examples" as distortion_examples {
+    * **distortion_id** : VARCHAR <<FK>>
+    * example : VARCHAR
+}
+
+entity "diary_entry_distortions" as diary_distortions {
+    * **entry_id** : UUID <<FK>>
+    * **distortion_id** : VARCHAR <<FK>>
+}
+
+entity "session_modules" as session_modules {
+    * **id** : UUID <<PK>>
+    --
+    name : VARCHAR
+    description : TEXT
+    order_index : INTEGER
+}
+
+entity "cbt_sessions" as cbt_sessions {
+    * **id** : UUID <<PK>>
+    --
+    module_id : UUID <<FK>>
+    title : VARCHAR
+    description : TEXT
+    duration_minutes : INTEGER
+    order_index : INTEGER
+}
+
+entity "cbt_session_objectives" as cbt_objectives {
+    * **session_id** : UUID <<FK>>
+    * objective : VARCHAR
+}
+
+entity "cbt_session_modalities" as cbt_modalities {
+    * **session_id** : UUID <<FK>>
+    * modality : ENUM(TEXT, VOICE, VIDEO)
+}
+
+entity "trusted_contacts" as trusted_contacts {
+    * **id** : UUID <<PK>>
+    --
+    * user_id : UUID <<FK>>
+    name : VARCHAR
+    phone : VARCHAR
+    relationship : VARCHAR
+}
+
+' Relationships
+users ||--o{ user_sessions : "has many"
+users ||--o{ diary_entries : "has many"
+users ||--o{ trusted_contacts : "has many"
+
+user_sessions ||--o{ chat_messages : "contains"
+user_sessions }o--|| cbt_sessions : "based on"
+
+cbt_sessions }o--|| session_modules : "belongs to"
+cbt_sessions ||--o{ cbt_objectives : "has"
+cbt_sessions ||--o{ cbt_modalities : "supports"
+
+diary_entries ||--o{ diary_emotions : "has"
+diary_entries ||--o{ diary_distortions : "identified"
+cognitive_distortions ||--o{ diary_distortions : "referenced by"
+cognitive_distortions ||--o{ distortion_examples : "has"
+
+@enduml

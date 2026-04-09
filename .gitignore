@@ -27,3 +27,6 @@ data/
 
 # Logs
 *.log
+
+# PDFs (assignment docs - not part of submission)
+*.pdf

@@ -35,22 +35,23 @@ class DiaryServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        user = User.builder().id(userId).name("Alice").email("alice@example.com").build();
+        user = new User();
+        user.setId(userId);
+        user.setName("Alice");
+        user.setEmail("alice@example.com");
     }
 
     // ── createEntry ───────────────────────────────────────────────────────────
 
     @Test
     void createEntry_success() {
-        DiaryEntry saved = DiaryEntry.builder()
-                .id(entryId)
-                .user(user)
-                .situation("Difficult meeting")
-                .automaticThought("I always mess up")
-                .moodBefore(3)
-                .moodAfter(5)
-                .createdAt(LocalDateTime.now())
-                .build();
+        DiaryEntry saved = new DiaryEntry();
+        saved.setId(entryId);
+        saved.setUser(user);
+        saved.setSituation("Difficult meeting");
+        saved.setAutomaticThought("I always mess up");
+        saved.setMoodBefore(3);
+        saved.setMoodAfter(5);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(distortionRepository.findAllById(anyList())).thenReturn(List.of());
@@ -81,14 +82,14 @@ class DiaryServiceImplTest {
 
     @Test
     void getEntries_returnsPageOfSummaries() {
-        DiaryEntry entry = DiaryEntry.builder()
-                .id(entryId).user(user)
-                .situation("Test situation")
-                .automaticThought("Test thought")
-                .moodBefore(4).moodAfter(6)
-                .createdAt(LocalDateTime.now())
-                .deleted(false)
-                .build();
+        DiaryEntry entry = new DiaryEntry();
+        entry.setId(entryId);
+        entry.setUser(user);
+        entry.setSituation("Test situation");
+        entry.setAutomaticThought("Test thought");
+        entry.setMoodBefore(4);
+        entry.setMoodAfter(6);
+        entry.setDeleted(false);
 
         Page<DiaryEntry> page = new PageImpl<>(List.of(entry));
         when(diaryEntryRepository.findByUserIdAndDeletedFalseOrderByCreatedAtDesc(
@@ -104,10 +105,13 @@ class DiaryServiceImplTest {
 
     @Test
     void getEntryDetail_returnsEntry() {
-        DiaryEntry entry = DiaryEntry.builder()
-                .id(entryId).user(user)
-                .situation("Test").automaticThought("Thought")
-                .deleted(false).createdAt(LocalDateTime.now()).build();
+        DiaryEntry entry = new DiaryEntry();
+        entry.setId(entryId);
+        entry.setUser(user);
+        entry.setSituation("Test");
+        entry.setAutomaticThought("Thought");
+        entry.setDeleted(false);
+
         when(diaryEntryRepository.findById(entryId)).thenReturn(Optional.of(entry));
 
         DiaryEntryResponse result = diaryService.getEntryDetail(entryId);
@@ -116,7 +120,10 @@ class DiaryServiceImplTest {
 
     @Test
     void getEntryDetail_throwsNotFound_whenDeleted() {
-        DiaryEntry deleted = DiaryEntry.builder().id(entryId).deleted(true).build();
+        DiaryEntry deleted = new DiaryEntry();
+        deleted.setId(entryId);
+        deleted.setDeleted(true);
+
         when(diaryEntryRepository.findById(entryId)).thenReturn(Optional.of(deleted));
 
         assertThatThrownBy(() -> diaryService.getEntryDetail(entryId))
@@ -127,7 +134,10 @@ class DiaryServiceImplTest {
 
     @Test
     void deleteEntry_setsSoftDeleteFlag() {
-        DiaryEntry entry = DiaryEntry.builder().id(entryId).deleted(false).build();
+        DiaryEntry entry = new DiaryEntry();
+        entry.setId(entryId);
+        entry.setDeleted(false);
+
         when(diaryEntryRepository.findById(entryId)).thenReturn(Optional.of(entry));
 
         diaryService.deleteEntry(entryId);
@@ -147,8 +157,11 @@ class DiaryServiceImplTest {
 
     @Test
     void suggestDistortions_findsAllOrNothingPattern() {
-        CognitiveDistortion d = CognitiveDistortion.builder()
-                .id("all-or-nothing").name("All-or-Nothing Thinking").build();
+        CognitiveDistortion d = new CognitiveDistortion();
+        d.setId("all-or-nothing");
+        d.setName("All-or-Nothing Thinking");
+
+        when(distortionRepository.findById(anyString())).thenReturn(Optional.empty());
         when(distortionRepository.findById("all-or-nothing")).thenReturn(Optional.of(d));
 
         List<DistortionSuggestion> suggestions =
@@ -168,9 +181,9 @@ class DiaryServiceImplTest {
 
     @Test
     void getInsights_returnsInsights() {
-        when(diaryEntryRepository.countByUserIdAndDeletedFalse(userId)).thenReturn(5L);
+        when(diaryEntryRepository.findByUserIdAndDeletedFalse(userId)).thenReturn(
+                List.of(new DiaryEntry(), new DiaryEntry(), new DiaryEntry(), new DiaryEntry(), new DiaryEntry()));
         when(diaryEntryRepository.calculateAverageMoodImprovement(userId)).thenReturn(1.5);
-        when(diaryEntryRepository.findTopDistortionsByUserId(eq(userId), any())).thenReturn(List.of());
 
         DiaryInsights insights = diaryService.getInsights(userId);
 
@@ -181,9 +194,8 @@ class DiaryServiceImplTest {
 
     @Test
     void getInsights_handlesNullAverageMood() {
-        when(diaryEntryRepository.countByUserIdAndDeletedFalse(userId)).thenReturn(0L);
+        when(diaryEntryRepository.findByUserIdAndDeletedFalse(userId)).thenReturn(List.of());
         when(diaryEntryRepository.calculateAverageMoodImprovement(userId)).thenReturn(null);
-        when(diaryEntryRepository.findTopDistortionsByUserId(eq(userId), any())).thenReturn(List.of());
 
         DiaryInsights insights = diaryService.getInsights(userId);
         assertThat(insights.averageMoodImprovement()).isEqualTo(0.0);

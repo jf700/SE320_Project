@@ -29,21 +29,8 @@ MERGE INTO distortion_examples(distortion_id, example) KEY(distortion_id, exampl
 ('labeling',           'I made a mistake, so I am a loser.'),
 ('personalization',    'My team missed the deadline — it is all my fault.');
 
--- ─── Distortion Reframing Questions ──────────────────────────────────────────
-MERGE INTO distortion_reframing_questions(distortion_id, question) KEY(distortion_id, question) VALUES
-('all-or-nothing',     'Is there a middle ground between these extremes?'),
-('all-or-nothing',     'Can you think of shades of gray in this situation?'),
-('catastrophizing',    'What is the most likely outcome?'),
-('catastrophizing',    'How have similar situations turned out in the past?'),
-('mind-reading',       'What evidence do you have for this assumption?'),
-('mind-reading',       'Could there be other explanations for their behavior?'),
-('overgeneralization', 'Is this truly always the case?'),
-('overgeneralization', 'Can you think of exceptions to this pattern?'),
-('should-statements',  'Where does this rule come from?'),
-('should-statements',  'What would happen if you replaced should with prefer?');
-
 -- ─── Session Modules ─────────────────────────────────────────────────────────
-MERGE INTO session_modules(id, title, description, order_index) KEY(id) VALUES
+MERGE INTO session_modules(id, name, description, order_index) KEY(id) VALUES
 ('11111111-1111-1111-1111-111111111101', 'Foundations of CBT',
     'Learn the core principles of Cognitive Behavioral Therapy and how thoughts affect feelings.', 1),
 ('11111111-1111-1111-1111-111111111102', 'Identifying Cognitive Distortions',
@@ -79,7 +66,7 @@ MERGE INTO cbt_sessions(id, module_id, title, description, duration_minutes, ord
     'Values and Meaningful Work', 'Reconnect with your core values to guide recovery decisions.', 40, 3);
 
 -- ─── Session Objectives ───────────────────────────────────────────────────────
-MERGE INTO session_objectives(session_id, objective) KEY(session_id, objective) VALUES
+MERGE INTO cbt_session_objectives(session_id, objective) KEY(session_id, objective) VALUES
 ('22222222-2222-2222-2222-222222222201', 'Understand the CBT triangle'),
 ('22222222-2222-2222-2222-222222222201', 'Identify one automatic thought from this week'),
 ('22222222-2222-2222-2222-222222222205', 'Complete a full 7-column thought record'),
@@ -88,7 +75,7 @@ MERGE INTO session_objectives(session_id, objective) KEY(session_id, objective) 
 ('22222222-2222-2222-2222-222222222208', 'Identify your primary burnout driver');
 
 -- ─── Session Modalities ───────────────────────────────────────────────────────
-MERGE INTO session_modalities(session_id, modality) KEY(session_id, modality) VALUES
+MERGE INTO cbt_session_modalities(session_id, modality) KEY(session_id, modality) VALUES
 ('22222222-2222-2222-2222-222222222201', 'TEXT'),
 ('22222222-2222-2222-2222-222222222202', 'TEXT'),
 ('22222222-2222-2222-2222-222222222203', 'TEXT'),

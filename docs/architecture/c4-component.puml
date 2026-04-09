@@ -16,25 +16,34 @@ Container_Boundary(api, "Spring Boot Application") {
 
     ' Service Layer
     Component(authSvc, "AuthService", "Spring Service", "User authentication, JWT token generation and validation")
-    Component(sessionSvc, "SessionService", "Spring Service", "Session business logic, coordinates with AI for chat responses")
-    Component(diarySvc, "DiaryService", "Spring Service", "Diary entry management and AI-powered distortion suggestions")
-    Component(progressSvc, "ProgressService", "Spring Service", "Calculates progress metrics and generates achievement data")
+    Component(sessionSvc, "SessionService", "Spring Service", "Session business logic: start, chat, end, history")
+    Component(diarySvc, "DiaryService", "Spring Service", "Diary entry management and keyword-based distortion suggestions")
+    Component(progressSvc, "ProgressService", "Spring Service", "Calculates progress metrics, burnout recovery, and achievements")
     Component(crisisSvc, "CrisisService", "Spring Service", "Manages crisis resources, safety plans, and coping strategies")
-    Component(aiSvc, "AiService", "Spring Service", "Core AI integration: therapeutic responses, distortion analysis, session summaries")
+    Component(aiSvc, "AiService", "Spring Service", "Core AI integration: therapeutic responses, distortion analysis, crisis detection")
 
     ' Repository Layer
     Component(userRepo, "UserRepository", "Spring Data JPA", "Data access for User entities")
-    Component(sessionRepo, "SessionRepository", "Spring Data JPA", "Data access for UserSession entities with custom queries")
-    Component(diaryRepo, "DiaryEntryRepository", "Spring Data JPA", "Data access for DiaryEntry entities with pagination")
-    Component(chatRepo, "ChatMessageRepository", "Spring Data JPA", "Data access for ChatMessage entities ordered by timestamp")
+    Component(sessionRepo, "UserSessionRepository", "Spring Data JPA", "Data access for UserSession entities with date-range and status queries")
+    Component(diaryRepo, "DiaryEntryRepository", "Spring Data JPA", "Data access for DiaryEntry entities with pagination and mood queries")
+    Component(chatRepo, "ChatMessageRepository", "Spring Data JPA", "Data access for ChatMessage entities")
+    Component(cbtRepo, "CbtSessionRepository", "Spring Data JPA", "Data access for CbtSession entities ordered by module")
+    Component(moduleRepo, "SessionModuleRepository", "Spring Data JPA", "Data access for SessionModule entities")
+    Component(distortionRepo, "CognitiveDistortionRepository", "Spring Data JPA", "Data access for CognitiveDistortion entities")
+    Component(contactRepo, "TrustedContactRepository", "Spring Data JPA", "Data access for TrustedContact entities by user")
 
     ' AI Integration
     Component(ragBuilder, "RagContextBuilder", "Spring Component", "Builds context from vector store, session history, and diary patterns")
-    Component(crisisDetector, "CrisisDetector", "Spring Component", "Dual-layer crisis detection: keyword-based + AI semantic analysis")
+    Component(kbLoader, "KnowledgeBaseLoader", "Spring Component", "Loads distortions, CBT techniques, and crisis protocols into vector store")
+    Component(crisisDetector, "CrisisDetector", "Spring Component", "Dual-layer crisis detection: keyword scan + AI semantic analysis")
 
     ' Security
-    Component(jwtFilter, "JwtAuthenticationFilter", "Spring Security Filter", "Intercepts requests to validate JWT tokens")
-    Component(jwtProvider, "JwtTokenProvider", "Spring Component", "Generates and validates JWT access and refresh tokens")
+    Component(jwtFilter, "JwtAuthenticationFilter", "Spring Security Filter", "Intercepts requests to validate JWT tokens and set authentication")
+    Component(jwtProvider, "JwtTokenProvider", "Spring Component", "Generates and validates HS256-signed JWT access and refresh tokens")
+    Component(tokenBlacklist, "TokenBlacklist", "Spring Component", "In-memory set tracking invalidated tokens for logout")
+
+    ' Exception Handling
+    Component(exHandler, "GlobalExceptionHandler", "@RestControllerAdvice", "Maps exceptions to proper HTTP status codes and error response format")
 }
 
 ContainerDb(db, "H2 Database", "H2", "Persistent storage")
@@ -48,17 +57,18 @@ Rel(diaryCtrl, diarySvc, "Delegates diary operations")
 Rel(progressCtrl, progressSvc, "Delegates progress queries")
 Rel(crisisCtrl, crisisSvc, "Delegates crisis operations")
 
-' Service -> Service relationships
-Rel(sessionSvc, aiSvc, "Requests AI chat responses and session summaries")
-Rel(diarySvc, aiSvc, "Requests distortion analysis and insights")
-Rel(crisisSvc, aiSvc, "Requests crisis detection")
-
 ' Service -> Repository relationships
 Rel(authSvc, userRepo, "Reads/writes user data")
-Rel(sessionSvc, sessionRepo, "Reads/writes session data")
+Rel(sessionSvc, cbtRepo, "Reads CBT session templates")
+Rel(sessionSvc, moduleRepo, "Reads session modules")
+Rel(sessionSvc, sessionRepo, "Reads/writes user sessions")
+Rel(sessionSvc, userRepo, "Reads user data")
+Rel(sessionSvc, chatRepo, "Saves chat messages")
 Rel(diarySvc, diaryRepo, "Reads/writes diary entries")
-Rel(aiSvc, chatRepo, "Reads chat history for context")
-Rel(aiSvc, sessionRepo, "Reads session data for context")
+Rel(diarySvc, userRepo, "Reads user data")
+Rel(diarySvc, distortionRepo, "Reads distortion definitions")
+Rel(progressSvc, sessionRepo, "Reads session counts and history")
+Rel(progressSvc, diaryRepo, "Reads diary counts and mood data")
 
 ' AI Integration relationships
 Rel(aiSvc, ragBuilder, "Requests assembled RAG context")
@@ -67,17 +77,24 @@ Rel(ragBuilder, vectorStore, "Performs similarity search")
 Rel(ragBuilder, sessionRepo, "Retrieves session history")
 Rel(ragBuilder, diaryRepo, "Retrieves diary patterns")
 Rel(ragBuilder, chatRepo, "Retrieves session transcript")
+Rel(kbLoader, vectorStore, "Loads knowledge base documents")
 
 ' External relationships
 Rel(userRepo, db, "JDBC/JPA")
 Rel(sessionRepo, db, "JDBC/JPA")
 Rel(diaryRepo, db, "JDBC/JPA")
 Rel(chatRepo, db, "JDBC/JPA")
+Rel(cbtRepo, db, "JDBC/JPA")
+Rel(moduleRepo, db, "JDBC/JPA")
+Rel(distortionRepo, db, "JDBC/JPA")
+Rel(contactRepo, db, "JDBC/JPA")
 Rel(aiSvc, llm, "Sends prompts via ChatClient", "HTTPS")
 Rel(crisisDetector, llm, "Sends crisis analysis prompts", "HTTPS")
 
 ' Security relationships
 Rel(jwtFilter, jwtProvider, "Validates tokens")
+Rel(jwtFilter, tokenBlacklist, "Checks blacklisted tokens")
 Rel(authSvc, jwtProvider, "Generates tokens")
+Rel(authSvc, tokenBlacklist, "Blacklists tokens on logout")
 
 @enduml

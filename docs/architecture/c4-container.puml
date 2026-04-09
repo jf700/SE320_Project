@@ -10,11 +10,11 @@ Person(therapist, "Therapist", "Monitors patient progress")
 Person(admin, "System Administrator", "Manages the platform")
 
 System_Boundary(dta, "Digital Therapy Assistant") {
-    Container(cli, "CLI Application", "Java", "Command-line interface providing menu-driven therapeutic workflows for user interaction")
-    Container(api, "Spring Boot Application", "Java / Spring Boot 3.x", "Backend services: REST API endpoints, business logic, AI integration, authentication, and session management")
-    ContainerDb(db, "H2 Database", "H2 (file-based)", "Stores user accounts, sessions, diary entries, chat messages, and cognitive distortion data")
+    Container(cli, "CLI Application", "Java", "Command-line interface providing menu-driven therapeutic workflows using the Command Pattern")
+    Container(api, "Spring Boot Application", "Java / Spring Boot 3.4", "Backend services: REST API, business logic, AI integration, JWT authentication")
+    ContainerDb(db, "H2 Database", "H2 (file-based)", "Stores user accounts, sessions, diary entries, chat messages, and cognitive distortions")
     Container(vectorstore, "SimpleVector Store", "Spring AI SimpleVectorStore", "Vector storage for RAG-based similarity search of CBT knowledge base documents")
-    Container(kb, "Knowledge Base", "JSON Files", "CBT reference materials: cognitive distortions, techniques, crisis protocols, and burnout-specific content")
+    Container(kb, "Knowledge Base", "JSON Files", "CBT reference materials: distortions.json, cbt-techniques.json, crisis-protocols.json")
 }
 
 System_Ext(llm, "LLM Provider\n(Anthropic Claude)", "AI language model for therapeutic responses")

@@ -38,13 +38,12 @@ class AuthServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        sampleUser = User.builder()
-                .id(userId)
-                .name("Alice")
-                .email("alice@example.com")
-                .passwordHash("$2a$hashed")
-                .onboardingComplete(false)
-                .build();
+        sampleUser = new User();
+        sampleUser.setId(userId);
+        sampleUser.setName("Alice");
+        sampleUser.setEmail("alice@example.com");
+        sampleUser.setPasswordHash("$2a$hashed");
+        sampleUser.setOnboardingComplete(false);
     }
 
     // ── register ──────────────────────────────────────────────────────────────
